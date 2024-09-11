@@ -1,8 +1,7 @@
-// src/navigation/types.ts
 export type RootStackParamList = {
-    WelcomeScren: undefined;
+    WelcomeScreen: undefined;
     HomeScreen: undefined;
-    SignUp: undefined;
-    Login: undefined;
+    LoginScreen: undefined;
+    Main: undefined;
     // Adicione outras telas conforme necessário
 };

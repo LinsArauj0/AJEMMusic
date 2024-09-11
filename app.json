@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AJEMusic2",
-    "slug": "AJEMusic2",
+    "name": "AJEMusic",
+    "slug": "AJEMusic",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,11 +17,14 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#ffffff",
+        "bundleIdentifier": "com.ajemusic.app"
+      },
+      "package": "com.anonymous.AJEMusic"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "scheme": "ajemusic"
   }
 }
