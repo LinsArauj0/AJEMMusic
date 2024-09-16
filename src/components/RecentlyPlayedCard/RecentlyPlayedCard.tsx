@@ -3,7 +3,6 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
-// Definir o tipo para o item recebido
 type RecentlyPlayedCardProps = {
   item: {
     track: {
@@ -15,7 +14,6 @@ type RecentlyPlayedCardProps = {
   };
 };
 
-// Definir o tipo de navegação (opcional, depende da sua configuração de rotas)
 type RootStackParamList = {
   Info: { item: any };
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/types';
@@ -38,7 +38,7 @@ const WelcomeScreen: React.FC = () => {
 
             <View style={styles.subContainers}>
                 <Text style={styles.text}>
-                    Dos sucessos <Text style={{ color: '#26c6da' }}>mais recentes</Text> aos <Text style={{ color: '#26c6da' }}>maiores</Text>, toque suas faixas favoritas no <Text style={{ color: '#26c6da' }}>AJEM Music</Text> agora!
+                    Dos sucessos <Text style={styles.highlightText}>mais recentes</Text> aos <Text style={styles.highlightText}>maiores</Text>, toque suas faixas favoritas no <Text style={styles.highlightText}>AJEM Music</Text> agora!
                 </Text>
                 <View style={styles.progressBar}>
                     {/* Primeira parte: preenchida */}
@@ -94,6 +94,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
         fontWeight: 'bold',
+    },
+    highlightText: {
+        color: '#26c6da',
     },
     imgBigCircle: {
         position: 'absolute',

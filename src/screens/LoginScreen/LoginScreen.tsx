@@ -1,4 +1,3 @@
-// LoginScreen.tsx
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -20,7 +19,6 @@ const LoginScreen: React.FC = () => {
     useEffect(() => {
         const handleUrl = (event: { url: string }) => {
             const url = event.url;
-            console.log('URL recebida:', url);
             const code = new URL(url).searchParams.get('code');
             if (code) {
                 setAuthCode(code);

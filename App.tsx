@@ -7,7 +7,7 @@ export default function App() {
   return (
     <AuthProvider>
       <RouteNavigate />
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </AuthProvider>
   );
 }
