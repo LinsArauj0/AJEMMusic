@@ -3,7 +3,8 @@ export type RootStackParamList = {
     HomeScreen: undefined;
     LoginScreen: undefined;
     Main: undefined;
-    Liked: undefined
-    Info: undefined
+    Liked: undefined;
+    Info: undefined;
+    AlbumDetail: { albumId: string };
     // Adicione outras telas conforme necessário
 };

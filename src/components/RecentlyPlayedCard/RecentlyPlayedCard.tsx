@@ -17,6 +17,7 @@ type RecentlyPlayedCardProps = {
 type RootStackParamList = {
   Info: { item: any };
 };
+
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Info'>;
 
 const RecentlyPlayedCard: React.FC<RecentlyPlayedCardProps> = ({ item }) => {

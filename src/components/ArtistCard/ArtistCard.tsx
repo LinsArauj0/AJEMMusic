@@ -11,10 +11,14 @@ type ArtistCardProps = {
 const ArtistCard: React.FC<ArtistCardProps> = ({ item }) => {
   return (
     <View style={{ margin: 10 }}>
-      <Image
-        style={{ width: 130, height: 130, borderRadius: 5 }}
-        source={{ uri: item.images[0].url }}
-      />
+      {item.images.length > 0 ? (
+        <Image
+          style={{ width: 130, height: 130, borderRadius: 5 }}
+          source={{ uri: item.images[0].url }}
+        />
+      ) : (
+        <View style={{ width: 130, height: 130, borderRadius: 5, backgroundColor: 'gray' }} />
+      )}
       <Text
         style={{
           fontSize: 13,
@@ -28,6 +32,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({ item }) => {
     </View>
   );
 };
+
 
 export default ArtistCard;
 

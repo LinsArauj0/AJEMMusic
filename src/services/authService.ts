@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import { Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Configurações do Spotify
 const CLIENT_ID = '878fbcbf77b54de8bf2950b5ae3509c5';
 const CLIENT_SECRET = 'ea7d3ad56009461383bf0f932a1352b7';
-const REDIRECT_URI = 'exp://192.168.0.123:8081/--/auth';
+const REDIRECT_URI = 'exp://192.168.0.3:8081/--/auth';
 
-// Função para obter o token de acesso
 export const getAccessToken = async (authCode: string): Promise<string> => {
   try {
     console.log('Tentando obter o token de acesso...');
@@ -41,22 +40,40 @@ export const getAccessToken = async (authCode: string): Promise<string> => {
 
 export const loginWithSpotify = () => {
   const scopes = [
+    "user-read-private",
     "user-read-email",
     "user-library-read",
-    "user-read-recently-played",
-    "user-read-currently-playing",
-    "user-top-read",
+    "user-library-modify",
     "playlist-read-private",
+    "playlist-modify-private",
+    "playlist-modify-public",
     "playlist-read-collaborative",
-    "playlist-modify-public"
+    "user-read-recently-played",
+    "user-top-read",
+    "user-read-playback-state",
+    "user-modify-playback-state",
+    "user-read-currently-playing",
+    "app-remote-control",
+    "streaming",
+    "user-follow-read",
+    "user-follow-modify"
   ];
-
+  
   const scopeString = scopes.join(' ');
 
   const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopeString)}`;
 
   console.log('Abrindo URL de autenticação:', authUrl);
   Linking.openURL(authUrl);
+};
+
+const saveAccessToken = async (token: string) => {
+  try {
+    await AsyncStorage.setItem('accessToken', token);
+    console.log('Access token saved in storage');
+  } catch (error) {
+    console.error('Error saving access token:', error);
+  }
 };
 
 export const fetchRecentlyPlayed = async (accessToken: string) => {
@@ -69,7 +86,6 @@ export const fetchRecentlyPlayed = async (accessToken: string) => {
         },
       }
     );
-    console.log('Recently Played Songs:', response.data.items);
     return response.data.items;
   } catch (error) {
     console.error('Erro ao buscar músicas recentemente tocadas:', error);
@@ -77,26 +93,20 @@ export const fetchRecentlyPlayed = async (accessToken: string) => {
   }
 };
 
-// Função para buscar artistas mais tocados
-export const fetchTopArtists = async (accessToken: string) => {
+export const fetchTopArtists = async (token: string) => {
   try {
-    const response = await axios.get(
-      'https://api.spotify.com/v1/me/top/artists',
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      }
-    );
-    console.log('Top Artists:', response.data.items);
+    const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.items;
   } catch (error) {
-    console.error('Erro ao buscar artistas mais tocados:', error);
-    throw error;
+    console.error('Error fetching top artists:', error);
+    return [];
   }
 };
 
-// Função para buscar faixas mais tocadas
 export const fetchTopTracks = async (accessToken: string) => {
   try {
     const response = await axios.get(
@@ -107,7 +117,7 @@ export const fetchTopTracks = async (accessToken: string) => {
         },
       }
     );
-    console.log('Top Tracks:', response.data.items);
+    console.log('Top Tracks:', response.data);
     return response.data.items;
   } catch (error) {
     console.error('Erro ao buscar faixas mais tocadas:', error);
@@ -115,7 +125,6 @@ export const fetchTopTracks = async (accessToken: string) => {
   }
 };
 
-// Função para buscar playlists do usuário
 export const fetchPlaylists = async (accessToken: string) => {
   try {
     const response = await axios.get(
@@ -126,7 +135,7 @@ export const fetchPlaylists = async (accessToken: string) => {
         },
       }
     );
-    console.log('Playlists:', response.data.items);
+    console.log('Playlists:', response.data);
     return response.data.items;
   } catch (error) {
     console.error('Erro ao buscar playlists:', error);
@@ -134,27 +143,78 @@ export const fetchPlaylists = async (accessToken: string) => {
   }
 };
 
-// Função principal para autenticar e buscar dados
+export const fetchAlbums = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      'https://api.spotify.com/v1/me/albums',
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+    console.log('Álbuns:', response.data.items);
+    return response.data.items;
+  } catch (error) {
+    console.error('Erro ao buscar álbuns:', error);
+    throw error;
+  }
+};
+
+export const fetchPopularArtists = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      'https://api.spotify.com/v1/browse/new-releases?limit=20',
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+    console.log('Novos Lançamentos:', response.data);
+    return response.data.albums.items;
+  } catch (error) {
+    console.error('Erro ao buscar novos lançamentos:', error);
+    throw error;
+  }
+};
+
+export const fetchMusicGenres = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      'https://api.spotify.com/v1/recommendations/available-genre-seeds?limit=20',
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+    console.log('Gêneros musicais disponíveis:', response.data);
+    return response.data.genres;
+  } catch (error) {
+    console.error('Erro ao buscar gêneros musicais:', error);
+    throw error;
+  }
+};
+
 export const handleAuthentication = async (authCode: string) => {
   try {
     const accessToken = await getAccessToken(authCode);
-    console.log('Token de Acesso:', accessToken);
+    await saveAccessToken(accessToken);
 
-    // Buscar músicas recentemente tocadas
     const recentlyPlayed = await fetchRecentlyPlayed(accessToken);
-    console.log('Músicas Recentemente Tocadas:', recentlyPlayed);
-
-    // Buscar artistas mais tocados
     const topArtists = await fetchTopArtists(accessToken);
-    console.log('Artistas Mais Tocadas:', topArtists);
-
-    // Buscar faixas mais tocadas
     const topTracks = await fetchTopTracks(accessToken);
-    console.log('Faixas Mais Tocadas:', topTracks);
-
-    // Buscar playlists
     const playlists = await fetchPlaylists(accessToken);
-    console.log('Playlists:', playlists);
+    const popularArtists = await fetchPopularArtists(accessToken);
+
+    console.log('Dados recuperados com sucesso:', {
+      recentlyPlayed,
+      topArtists,
+      topTracks,
+      playlists,
+      popularArtists,
+    });
 
   } catch (error) {
     console.error('Erro na autenticação ou na obtenção de dados:', error);

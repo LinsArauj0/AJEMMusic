@@ -5,13 +5,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from "@expo/vector-icons";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { RootStackParamList } from './types';
 import { WelcomeScreen } from '../screens/WelcomeScreen/WelcomeScreen';
 import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 import { LoginScreen } from '../screens/LoginScreen/LoginScreen';
+import { ExplorerScreen } from '../screens/ExplorerScreen/ExplorerScreen';
+import { LibraryScreen } from '../screens/LibraryScreen/LibraryScreen';
 import { LikedSongsScreen } from '../screens/LikedSongsScreen/LikedSongsScreen';
 import { SongInfoScreen } from '../screens/SongInfoScreen/SongInfoScreen';
+import { AlbumDetailScreen } from '../components/AlbumDetailScreen/AlbumDetailScreen';
 import { View, Text } from 'react-native';
 
 const linking = {
@@ -27,19 +29,6 @@ const linking = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
-
-const SettingsScreen = () => (
-    <View>
-        <Text>Settings Screen</Text>
-    </View>
-);
-
-const ProfileScreen = () => (
-    <View>
-        <Text>Profile Screen</Text>
-    </View>
-);
-
 
 const HomeTabNavigator: React.FC = () => {
     return (
@@ -74,7 +63,7 @@ const HomeTabNavigator: React.FC = () => {
                         ),
                 }} />
             <Tab.Screen name="Pesquisar"
-                component={SettingsScreen}
+                component={ExplorerScreen}
                 options={{
                     tabBarLabel: "Explorar",
                     headerShown: false,
@@ -87,16 +76,16 @@ const HomeTabNavigator: React.FC = () => {
                         ),
                 }} />
             <Tab.Screen name="Biblioteca"
-                component={ProfileScreen}
+                component={LibraryScreen}
                 options={{
-                    tabBarLabel: "Explorar",
+                    tabBarLabel: "Biblioteca",
                     headerShown: false,
                     tabBarLabelStyle: { color: "white", fontWeight: '600', fontSize: 12 },
                     tabBarIcon: ({ focused }) =>
                         focused ? (
-                            <MaterialIcons name="library-music" size={24} color="white" />
+                            <Ionicons name="library-outline" size={24} color="white" />
                         ) : (
-                            <MaterialIcons name="library-music" size={24} color="white" />
+                            <Ionicons name="library-outline" size={24} color="white" />
                         ),
                 }} />
         </Tab.Navigator>
@@ -138,6 +127,11 @@ const RouteNavigate: React.FC = () => {
                 <Stack.Screen
                     name="Info"
                     component={SongInfoScreen}
+                    options={{ headerShown: false }} />
+                
+                <Stack.Screen
+                    name="AlbumDetail"
+                    component={AlbumDetailScreen}
                     options={{ headerShown: false }} />
 
             </Stack.Navigator>
